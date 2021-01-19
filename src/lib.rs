@@ -235,7 +235,12 @@ impl Database {
     pub fn load_system_fonts(&mut self) {
         #[cfg(target_os = "windows")]
         {
-            self.load_fonts_dir("C:\\Windows\\Fonts\\");
+            if let Ok(ref systemroot) = std::env::var("SYSTEMROOT") {
+                let path = std::path::Path::new(systemroot).join("Fonts");
+                self.load_fonts_dir(path);
+            } else {
+                warn!("Cannot resolve SYSTEMROOT");
+            }
         }
 
         #[cfg(target_os = "macos")]
