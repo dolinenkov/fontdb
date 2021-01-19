@@ -262,6 +262,11 @@ impl Database {
                 self.load_fonts_dir(path);
             }
         }
+
+        #[cfg(target_os = "android")]
+        {
+            self.load_fonts_dir("/system/fonts/");
+        }
     }
 
     /// Removes a font face by `id` from the database.
